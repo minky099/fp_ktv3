@@ -40,7 +40,7 @@ $("body").on('click', '#select_path_config_btn', function(e){
   e.preventDefault();
   var path = $('#yaml_path_config').val().trim();
   if (path == '') path = path_app_root + '/data/db';
-  m_select_local_file_modal("설정 파일", path, false, function(result){
+  globalSelectLocalFile("설정 파일", path, function(result){
     $('#yaml_path_config').val(result);
   });
 });

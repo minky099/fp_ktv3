@@ -37,8 +37,8 @@ $(document).ready(function(){
 $("body").on('click', '#select_analysis_path_source_btn', function(e){
   e.preventDefault();
   var path = $('#analysis_path_source').val().trim();
-  if (path == '') path = '/'
-  m_select_local_file_modal("소스 폴더 선택", path, true, function(result){
+  if (path == '') path = '/';
+  globalSelectLocalFolder("소스 폴더 선택", path, function(result){
     $('#analysis_path_source').val(result);
   });
 });
@@ -46,8 +46,8 @@ $("body").on('click', '#select_analysis_path_source_btn', function(e){
 $("body").on('click', '#select_analysis_path_finish_btn', function(e){
   e.preventDefault();
   var path = $('#analysis_path_finish').val().trim();
-  if (path == '') path = '/'
-  m_select_local_file_modal("종영 폴더 선택", path, true, function(result){
+  if (path == '') path = '/';
+  globalSelectLocalFolder("종영 폴더 선택", path, function(result){
     $('#analysis_path_finish').val(result);
   });
 });
@@ -55,8 +55,8 @@ $("body").on('click', '#select_analysis_path_finish_btn', function(e){
 $("body").on('click', '#select_analysis_path_incomplete_btn', function(e){
   e.preventDefault();
   var path = $('#analysis_path_incomplete').val().trim();
-  if (path == '') path = '/'
-  m_select_local_file_modal("미완성 폴더 선택", path, true, function(result){
+  if (path == '') path = '/';
+  globalSelectLocalFolder("미완성 폴더 선택", path, function(result){
     $('#analysis_path_incomplete').val(result);
   });
 });

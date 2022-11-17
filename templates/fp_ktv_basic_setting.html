@@ -46,8 +46,8 @@ $(document).ready(function(){
 $("body").on('click', '#select_basic_path_source_btn', function(e){
   e.preventDefault();
   var path = $('#basic_path_source').val().trim();
-  if (path == '') path = '/'
-  m_select_local_file_modal("소스 폴더", path, true, function(result){
+  if (path == '') path = '/';
+  globalSelectLocalFolder("소스 폴더", path, function(result){
     $('#basic_path_source').val(result);
   });
 });
@@ -55,8 +55,8 @@ $("body").on('click', '#select_basic_path_source_btn', function(e){
 $("body").on('click', '#select_basic_path_target_btn', function(e){
   e.preventDefault();
   var path = $('#basic_path_target').val().trim();
-  if (path == '') path = '/'
-  m_select_local_file_modal("타겟 폴더", path, true, function(result){
+  if (path == '') path = '/';
+  globalSelectLocalFolder("타겟 폴더", path, function(result){
     $('#basic_path_target').val(result);
   });
 });
@@ -64,8 +64,8 @@ $("body").on('click', '#select_basic_path_target_btn', function(e){
 $("body").on('click', '#select_basic_path_error_btn', function(e){
   e.preventDefault();
   var path = $('#basic_path_error').val().trim();
-  if (path == '') path = '/'
-  m_select_local_file_modal("에러 폴더", path, true, function(result){
+  if (path == '') path = '/';
+  globalSelectLocalFolder("에러 폴더", path, function(result){
     $('#basic_path_error').val(result);
   });
 });

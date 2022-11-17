@@ -75,8 +75,8 @@ $(document).ready(function(){
 $("body").on('click', '#select_analysis_path_btn', function(e){
   e.preventDefault();
   var path = $('#analysis_path').val().trim();
-  if (path == '') path = '/'
-  m_select_local_file_modal("분석 폴더 선택", path, true, function(result){
+  if (path == '') path = '/';
+  globalSelectLocalFolder("분석 폴더 선택", path, function(result){
     $('#analysis_path').val(result);
   });
 });
