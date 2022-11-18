@@ -38,6 +38,7 @@ class ModuleBasic(PluginModuleBase):
         if sub == 'setting':
             arg['is_include'] = F.scheduler.is_include(self.get_scheduler_name())
             arg['is_running'] = F.scheduler.is_running(self.get_scheduler_name())
+            arg['config_path'] = ToolUtil.make_path(P.ModelSetting.get(f'{self.name}_path_config'))
         return render_template(f'{P.package_name}_{self.name}_{sub}.html', arg=arg)
         
 
