@@ -28,6 +28,8 @@ class ModuleBasic(PluginModuleBase):
             f'{self.name}_db_delete_day' : '30',
             f'{self.name}_db_auto_delete' : 'False',
             f'{P.package_name}_item_last_list_option' : '',
+            f'{self.name}_is_gds_bot' : 'False',
+            f'{self.name}_use_notify' : 'False',
         }
         self.web_list_model = ModelFPKtvItem
         default_route_socketio_module(self, attach='/status')

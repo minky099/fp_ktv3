@@ -1,10 +1,11 @@
+import json
 import os
 import re
 import traceback
 
 import requests
-from support import SupportFile
-from tool import EntityKtv
+from support import SupportDiscord, SupportFile
+from tool import EntityKtv, ToolNotify
 
 from .model import ModelFPKtvItem
 from .setup import F, P
@@ -84,6 +85,27 @@ class Task(object):
                                 #P.logger.info(res)
                                 data = res.json()
                                 P.logger.info(f"PLEX SCAN 요청 : {url} {data}")
+                        
+                        if P.ModelSetting.get_bool("basic_is_gds_bot"):
+                            bot = {
+                                't1': 'gds_tool',
+                                't2': 'fp',
+                                't3': 'vod',
+                                'data': {
+                                    'of': original_filename,
+                                    'st': db_item.status,
+                                    'r_fold': db_item.result_folder,
+                                    'r_file': db_item.result_filename,
+                                    'meta': db_item.meta_find,
+                                    'poster': entity.data['meta'].get('poster'),
+                                }
+                            }
+                            SupportDiscord.send_discord_bot_message(json.dumps(bot), "https://discord.com/api/webhooks/1043387235891949599/A4N2PHfKwA6n-5wXfWdPyoSQPXT6wpj1HEmAMEam6v1JnFxd-PyHt-J7pOEkBEMu0Ld1")
+                        
+                        if P.ModelSetting.get_bool("basic_use_notify"):
+                            msg = f"파일: {original_filename}\n최종폴더: {db_item.result_folder}\n최종파일: {db_item.result_filename}"
+                            ToolNotify.send_message(msg, message_id="fp_ktv_basic", image_url=entity.data['meta'].get('poster'))
+
                     except Exception as e:    
                         P.logger.error(f"Exception:{e}")
                         P.logger.error(traceback.format_exc())
