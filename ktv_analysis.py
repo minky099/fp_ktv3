@@ -1,23 +1,33 @@
 # -*- coding: utf-8 -*-
 #########################################################
 # python
-import os, sys, traceback, re, json, threading, time, shutil, fnmatch, glob
+import fnmatch
+import glob
+import json
+import os
+import re
+import shutil
+import sys
+import threading
+import time
+import traceback
 from datetime import datetime, timedelta
+
 # third-party
 import requests
 # third-party
-from flask import request, render_template, jsonify, redirect
-from sqlalchemy import or_, and_, func, not_, desc
-
+from flask import jsonify, redirect, render_template, request
 # sjva 공용
-from framework import db, scheduler, path_data, socketio, SystemModelSetting, app, celery, Util
+from framework import (SystemModelSetting, Util, app, celery, db, path_data,
+                       scheduler, socketio)
 from plugin import LogicModuleBase, default_route_socketio
-from tool_expand import ToolExpandFileProcess
-from tool_base import ToolShutil, d, ToolUtil, ToolBaseFile
-from tool_expand import EntityKtv
+from sqlalchemy import and_, desc, func, not_, or_
+from tool_base import ToolBaseFile, ToolShutil, ToolUtil, d
+from tool_expand import EntityKtv, ToolExpandFileProcess
 
 # 패키지방과 음악사이
 from .plugin import P
+
 logger = P.logger
 package_name = P.package_name
 ModelSetting = P.ModelSetting
@@ -59,7 +69,7 @@ class LogicKtvAnalysis(LogicModuleBase):
                 arg['apikey'] = SystemModelSetting.get('auth_apikey')
             return render_template(f'{package_name}_{name}_{sub}.html', arg=arg)
         except Exception as e:
-            logger.error('Exception:%s', e)
+            logger.error(f"Exception:{str(e)}")
             logger.error(traceback.format_exc())
             return render_template('sample.html', title=f"{package_name}/{name}/{sub}")
 
@@ -104,7 +114,7 @@ class LogicKtvAnalysis(LogicModuleBase):
 
 
         except Exception as e: 
-            P.logger.error('Exception:%s', e)
+            P.logger.error(f"Exception:{str(e)}")
             P.logger.error(traceback.format_exc())
             return jsonify({'ret':'exception', 'log':str(e)})
 
@@ -148,8 +158,8 @@ class LogicKtvAnalysis(LogicModuleBase):
                 result['index'] = len(self.data['data'])
                 self.data['data'].append(result)
                 self.refresh_data(index=result['index'])
-        except Exception as exception: 
-            logger.error('Exception:%s', exception)
+        except Exception as e: 
+            logger.error(f"Exception:{str(e)}")
             logger.error(traceback.format_exc())
 
     def folder_move(self, index, target, mode):
@@ -427,8 +437,8 @@ class Task(object):
                         if tmp < data['min_no']['value']:
                             data['min_no']['value'] = tmp
                             data['min_no']['file'] = f
-                    except Exception as exception: 
-                        logger.error('Exception:%s', exception)
+                    except Exception as e: 
+                        logger.error(f"Exception:{str(e)}")
                         logger.error(traceback.format_exc())
 
             data['files'] = sorted(data['files'], key = lambda k: k['filename']['no'])
@@ -449,7 +459,7 @@ class Task(object):
                     if i not in data['episode_keys']:
                         data['episode_keys_empty'].append(i)
             except Exception as e:
-                logger.error('Exception:%s', e)
+                logger.error(f"Exception:{str(e)}")
                 logger.error(traceback.format_exc())
             #logger.warning(data['episode_keys_empty'])
             #logger.warning(f"보유 에피소드 수 : {len(data['episode_keys'])}")
@@ -518,8 +528,8 @@ for tmp in dirs:
     print(tmp)
     try:
         os.rename(os.path.join(p, tmp), os.path.join(p, tmp.replace('해피선데이 - 1박2일', '해피선데이-1박 2일 시즌3')))
-    except Exception as exception: 
-        logger.error('Exception:%s', exception)
+    except Exception as e: 
+        logger.error(f"Exception:{str(e)}")
         logger.error(traceback.format_exc())
 
 print('11111111111')

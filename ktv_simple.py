@@ -1,22 +1,32 @@
 # -*- coding: utf-8 -*-
 #########################################################
 # python
-import os, sys, traceback, re, json, threading, time, shutil, yaml
+import json
+import os
+import re
+import shutil
+import sys
+import threading
+import time
+import traceback
 from datetime import datetime
-# third-party
-import requests, yaml
-# third-party
-from flask import request, render_template, jsonify, redirect
-from sqlalchemy import or_, and_, func, not_, desc
 
+# third-party
+import requests
+import yaml
+# third-party
+from flask import jsonify, redirect, render_template, request
 # sjva 공용
-from framework import db, scheduler, path_data, socketio, SystemModelSetting, app, celery, Util, path_app_root
+from framework import (SystemModelSetting, Util, app, celery, db,
+                       path_app_root, path_data, scheduler, socketio)
 from plugin import LogicModuleBase, default_route_socketio
+from sqlalchemy import and_, desc, func, not_, or_
 from tool_base import ToolBaseFile, d
 from tool_expand import EntityKtv
 
 # 패키지
 from .plugin import P
+
 logger = P.logger
 package_name = P.package_name
 ModelSetting = P.ModelSetting
@@ -55,7 +65,7 @@ class LogicKtvSimple(LogicModuleBase):
                 arg['path_app_root'] = path_app_root
             return render_template(f'{package_name}_{name}_{sub}.html', arg=arg)
         except Exception as e:
-            logger.error('Exception:%s', e)
+            logger.error(f"Exception:{str(e)}")
             logger.error(traceback.format_exc())
             return render_template('sample.html', title=f"{package_name}/{name}/{sub}")
 
@@ -82,7 +92,7 @@ class LogicKtvSimple(LogicModuleBase):
                         ret = {'ret':'warning', 'msg':'대기중입니다.'}
                 return jsonify(ret)
         except Exception as e: 
-            P.logger.error('Exception:%s', e)
+            P.logger.error(f"Exception:{str(e)}")
             P.logger.error(traceback.format_exc())
             return jsonify({'ret':'danger', 'msg':str(e)})
 
@@ -142,12 +152,14 @@ class LogicKtvSimple(LogicModuleBase):
                 result['index'] = len(self.data['data'])
                 self.data['data'].append(result)
                 self.refresh_data(index=result['index'])
-        except Exception as exception: 
-            logger.error('Exception:%s', exception)
+        except Exception as e: 
+            logger.error(f"Exception:{str(e)}")
             logger.error(traceback.format_exc())
 
 
 from .task_for_download import Task as DownloadProcessTask
+
+
 class Task(object):
     @staticmethod
     @celery.task(bind=True)

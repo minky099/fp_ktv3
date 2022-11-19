@@ -120,6 +120,6 @@ class ModuleBasic(PluginModuleBase):
                 result['index'] = len(self.data['data'])
                 self.data['data'].append(result)
                 self.refresh_data(index=result['index'])
-        except Exception as exception: 
-            logger.error('Exception:%s', exception)
+        except Exception as e: 
+            logger.error(f"Exception:{str(e)}")
             logger.error(traceback.format_exc())
