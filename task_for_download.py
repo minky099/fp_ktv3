@@ -248,27 +248,37 @@ class Task(object):
             return program_folder
         
         compare_folder_name = os.path.split(program_folder)[-1]
-        if 'target_folder_list' not in config:
-            max_depth = 2
-            config['target_folder_list'] = []
-            for base, dirs, files in os.walk(config['타겟 폴더']):
-                tmp = base.replace(config['타겟 폴더'], '')
-                depth = len(tmp.split(os.sep))
-                P.logger.debug(f"Depth : {depth}")
-                if depth > max_depth:
-                    P.logger.debug(f"{base} {dirs}")
-                    continue
 
-                for _dir in dirs:
-                    P.logger.debug(os.path.join(base, _dir))
-                    config['target_folder_list'].append(os.path.join(base, _dir))
+        if 'target_folder_list' not in config:
+            config['target_folder_list'] = []
+            if config['타겟 폴더 탐색 사용'].startswith("특정폴더"):
+                for tmp in config['특정폴더']:
+                    folderpath = os.path.join(config['타겟 폴더'], tmp)
+                    for name in os.listdir(folderpath):
+                        titlepath = os.path.join(folderpath, name)
+                        if os.path.isdir(titlepath):
+                            P.logger.debug(f"타겟폴더1: {titlepath}")
+                            config['target_folder_list'].append(titlepath)
+            else:
+                for genre in os.listdir(config['타겟 폴더']):
+                    genre_path = os.path.join(config['타겟 폴더'], genre)
+                    if os.path.isdir(genre_path) == False:
+                        continue
+                    for title in os.listdir(genre_path):
+                        title_path = os.path.join(genre_path, title)
+                        if os.path.isdir(title_path) == False:
+                            continue
+                        P.logger.debug(f"타겟폴더2: {title_path}")   
+
+                        config['target_folder_list'].append(title_path)
+
 
         for _dir in config['target_folder_list']:
             folder_name = os.path.split(_dir)[-1]
-            if config['타겟 폴더 탐색 사용'] == '방송제목포함':
+            if config['타겟 폴더 탐색 사용'].endswith('방송제목포함'):
                 if folder_name.find(entity.data['meta']['info']['title']) != -1:
                     return _dir
-            elif config['타겟 폴더 탐색 사용'] == '완전일치':
+            elif config['타겟 폴더 탐색 사용'].endswith('완전일치'):
                 if compare_folder_name == folder_name:
                     return _dir
         return program_folder 
