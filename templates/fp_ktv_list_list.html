@@ -84,7 +84,7 @@ function make_list(data) {
       tmp = j_info_text_left("생성", data[i].created_time, 3, 9);
       tmp += j_info_text_left("상태", data[i].status, 3, 9);
       tmp += j_info_text_left("DRY", data[i].is_dry ? "테스트":"이동", 3, 9);
-      tmp += j_info_text_left("메타", data[i].meta_find ? "매칭":"메타 없음", 3, 9);
+      tmp += j_info_text_left("메타", data[i].meta_find ? "매칭":text_color("메타 없음"), 3, 9);
       tmp += j_info_text_left("모듈", data[i].call_module, 3, 9);
       
       right += j_col(3, tmp);

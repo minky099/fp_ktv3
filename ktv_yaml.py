@@ -59,8 +59,8 @@ class LogicKtvYaml(LogicModuleBase):
             arg = P.ModelSetting.to_dict()
             arg['sub'] = self.name
             if sub == 'setting':
-                arg['scheduler'] = str(scheduler.is_include(self.get_scheduler_name()))
-                arg['is_running'] = str(scheduler.is_running(self.get_scheduler_name()))
+                arg['is_include'] = scheduler.is_include(self.get_scheduler_name())
+                arg['is_running'] = scheduler.is_running(self.get_scheduler_name())
                 arg['path_app_root'] = path_app_root
             return render_template(f'{package_name}_{name}_{sub}.html', arg=arg)
         except Exception as e:

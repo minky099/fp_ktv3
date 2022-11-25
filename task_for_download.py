@@ -51,10 +51,17 @@ class Task(object):
                                     db_item.status = "MOVE_BY_FTV"
                                     db_item.result_folder = os.path.join(config['경로 설정']['ftv'].format(error=error), f"{entity.data['process_info']['ftv_title']} ({entity.data['process_info']['ftv_year']})", f"Season {entity.data['filename']['sno']}")
                                 else:
-                                    db_item.status = "MOVE_BY_NOMETA"
-                                    db_item.result_folder = config['경로 설정']['no_meta'].format(error=error)
-                                    if config['메타 검색 실패시 방송별 폴더 생성']:
-                                        db_item.result_folder  = os.path.join(config['경로 설정']['no_meta'].format(error=error), entity.data['filename']['name'])
+                                    prefer = None
+                                    if config['메타 검색 실패시 타겟 폴더 탐색']:
+                                        prefer = Task.get_prefer_folder_nometa(config, entity.data['filename']['name'])
+                                    if prefer != None:
+                                        db_item.status = "MOVE_BY_NOMETA_BUT_LIBRARY"
+                                        db_item.result_folder = prefer
+                                    else:   
+                                        db_item.status = "MOVE_BY_NOMETA"
+                                        db_item.result_folder = config['경로 설정']['no_meta'].format(error=error)
+                                        if config['메타 검색 실패시 방송별 폴더 생성']:
+                                            db_item.result_folder  = os.path.join(config['경로 설정']['no_meta'].format(error=error), entity.data['filename']['name'])
                                 if is_dry == False:
                                     SupportFile.file_move(os.path.join(base, original_filename), db_item.result_folder, db_item.result_filename)
                         else:
@@ -243,12 +250,8 @@ class Task(object):
                 P.logger.error(f"타겟 파일 None")
 
 
-    def get_prefer_folder(config, entity, program_folder):
-        if config['타겟 폴더 탐색 사용'] == '미사용':
-            return program_folder
-        
-        compare_folder_name = os.path.split(program_folder)[-1]
 
+    def __check_target_folder(config):
         if 'target_folder_list' not in config:
             config['target_folder_list'] = []
             if config['타겟 폴더 탐색 사용'].startswith("특정폴더"):
@@ -273,6 +276,13 @@ class Task(object):
                         config['target_folder_list'].append(title_path)
 
 
+    def get_prefer_folder(config, entity, program_folder):
+        if config['타겟 폴더 탐색 사용'] == '미사용':
+            return program_folder
+        
+        compare_folder_name = os.path.split(program_folder)[-1]
+        Task.__check_target_folder(config)
+
         for _dir in config['target_folder_list']:
             folder_name = os.path.split(_dir)[-1]
             if config['타겟 폴더 탐색 사용'].endswith('방송제목포함'):
@@ -282,3 +292,13 @@ class Task(object):
                 if compare_folder_name == folder_name:
                     return _dir
         return program_folder 
+
+
+    def get_prefer_folder_nometa(config, program_name):
+        Task.__check_target_folder(config)
+
+        for _dir in config['target_folder_list']:
+            folder_name = os.path.split(_dir)[-1]
+            if folder_name.find(program_name) != -1:
+                return _dir
+         
