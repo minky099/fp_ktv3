@@ -52,7 +52,7 @@ class Task(object):
                                     db_item.result_folder = os.path.join(config['경로 설정']['ftv'].format(error=error), f"{entity.data['process_info']['ftv_title']} ({entity.data['process_info']['ftv_year']})", f"Season {entity.data['filename']['sno']}")
                                 else:
                                     prefer = None
-                                    if config['메타 검색 실패시 타겟 폴더 탐색']:
+                                    if config.get('메타 검색 실패시 타겟 폴더 탐색', False):
                                         prefer = Task.get_prefer_folder_nometa(config, entity.data['filename']['name'])
                                     if prefer != None:
                                         db_item.status = "MOVE_BY_NOMETA_BUT_LIBRARY"
@@ -60,7 +60,7 @@ class Task(object):
                                     else:   
                                         db_item.status = "MOVE_BY_NOMETA"
                                         db_item.result_folder = config['경로 설정']['no_meta'].format(error=error)
-                                        if config['메타 검색 실패시 방송별 폴더 생성']:
+                                        if config.get('메타 검색 실패시 방송별 폴더 생성', False):
                                             db_item.result_folder  = os.path.join(config['경로 설정']['no_meta'].format(error=error), entity.data['filename']['name'])
                                 if is_dry == False:
                                     SupportFile.file_move(os.path.join(base, original_filename), db_item.result_folder, db_item.result_filename)
