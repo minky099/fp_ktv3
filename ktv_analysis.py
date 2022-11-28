@@ -66,7 +66,7 @@ class LogicKtvAnalysis(LogicModuleBase):
                 arg['is_include'] = scheduler.is_include(self.get_scheduler_name())
                 arg['is_running'] = scheduler.is_running(self.get_scheduler_name())
             elif sub == 'status':
-                arg['apikey'] = SystemModelSetting.get('auth_apikey')
+                arg['apikey'] = SystemModelSetting.get('apikey')
             return render_template(f'{package_name}_{name}_{sub}.html', arg=arg)
         except Exception as e:
             logger.error(f"Exception:{str(e)}")
