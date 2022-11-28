@@ -28,7 +28,7 @@ class P(object):
         'category' : 'beta',
         'icon' : '',
         'developer' : u'soju6jan',
-        'description' : u'국내TV 파일처리 v2setup',
+        'description' : u'국내TV 파일처리 v2',
         'home' : f'https://github.com/minky099/{package_name}',
         'more' : '',
     }
