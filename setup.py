@@ -5,7 +5,7 @@ setting = {
     'home_module': None,
     'menu': {
         'uri': __package__,
-        'name': '국내TV 파일처리',
+        'name': '국내TV 파일처리setup',
         'list': [
             {
                 'uri': 'list',
