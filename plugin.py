@@ -28,8 +28,8 @@ class P(object):
         'category' : 'beta',
         'icon' : '',
         'developer' : u'soju6jan',
-        'description' : u'국내TV 파일처리 v2',
-        'home' : f'https://github.com/soju6jan/{package_name}',
+        'description' : u'국내TV 파일처리 v2setup',
+        'home' : f'https://github.com/minky099/{package_name}',
         'more' : '',
     }
 
